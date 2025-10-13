@@ -3,7 +3,13 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Trigger
+  - Enemy
+  - Amo
+  - Explosion
+  - PathGrid
+  - MovePoint
   layers:
   - Default
   - TransparentFX
@@ -38,6 +44,30 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: BackGround
+    uniqueID: 3540466285
+    locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Ground
+    uniqueID: 314945501
+    locked: 0
+  - name: Walls
+    uniqueID: 2851197715
+    locked: 0
+  - name: SpecialTiles
+    uniqueID: 2928073213
+    locked: 0
+  - name: Bodies
+    uniqueID: 762905755
+    locked: 0
+  - name: Furnature
+    uniqueID: 854245539
+    locked: 0
+  - name: Heads
+    uniqueID: 1881540897
+    locked: 0
+  - name: OverHead
+    uniqueID: 1149194111
     locked: 0
