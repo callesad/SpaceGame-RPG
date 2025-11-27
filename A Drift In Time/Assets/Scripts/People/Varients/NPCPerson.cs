@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NPCPerson : Person
+public class NPCPerson : Person, Iinteractable
 {
 
     //global variables//
@@ -52,6 +52,7 @@ public class NPCPerson : Person
     public PersonWalkingWithPurposeState WalkingWithPurpose;
     public PersonIdleState Idle;
     public PersonMeanderingState Meandering;
+    public PersonDialogueWithPlayerState Dialogue;
 
 //------------------------------------------------------------
 
@@ -82,6 +83,7 @@ public class NPCPerson : Person
         WalkingWithPurpose = new PersonWalkingWithPurposeState(this,stateMachine);
         Idle = new PersonIdleState(this,stateMachine);
         Meandering = new PersonMeanderingState(this,stateMachine);
+        Dialogue = new PersonDialogueWithPlayerState(this,stateMachine);
     
     }
 
@@ -446,4 +448,11 @@ public class NPCPerson : Person
     }
 
 //-------------------------------------------------
+
+    public void Interact(int interactType)
+    {
+        if (interactType == 1) {
+            stateMachine.ChangeState(Dialogue);
+        }
+    }
 }

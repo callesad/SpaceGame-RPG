@@ -6,6 +6,7 @@ public class PersonStateMachine
 {
 
     public PersonState currentState;
+    public PersonState previousState;
 
     public void Initialize(PersonState startingState)
     {
@@ -16,6 +17,7 @@ public class PersonStateMachine
 
     public void ChangeState(PersonState newState)
     {
+        previousState = currentState;
         currentState.ExitState();
         currentState = newState;
         currentState.EnterState();
