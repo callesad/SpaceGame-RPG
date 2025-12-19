@@ -17,6 +17,9 @@ public class Person : MonoBehaviour, Idamageable
 
     public bool debugLogs;
 
+
+    
+
     protected virtual void Awake()
     {
         rb = GetComponent<Rigidbody2D>();

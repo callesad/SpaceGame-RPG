@@ -7,6 +7,8 @@ public class NPCPerson : Person, Iinteractable
 
     //global variables//
 
+    public string DialogueKnotName = "npc";
+
 //path point references-------------------------------------------
 
     private GameObject pathGrid;
@@ -72,19 +74,39 @@ public class NPCPerson : Person, Iinteractable
 
 //monobehaviour functions-------------------------------------
 
+    #region subscribing to events
+    void OnEnable()
+    {
+        if (EventManager.Instance != null) {
+            EventManager.Instance.OnEnterDialogue+=OnEnterDialogue;
+            EventManager.Instance.OnExitDialogue+=OnExitDialogue;
+        }
+    }
+    
+
+    void OnDisable()
+    {
+        if (EventManager.Instance != null) {
+            EventManager.Instance.OnEnterDialogue-=OnEnterDialogue;
+            EventManager.Instance.OnExitDialogue-=OnExitDialogue;
+        }
+    }
+    #endregion
+
+    #region initializonf actions 
     protected override void Awake()
     {
         base.Awake();
         stateMachine = new PersonStateMachine();
         pathGrid = GameObject.FindGameObjectWithTag("PathGrid");
     
-        //initializing states
+        #region initializing states
         RandomlyWalking = new PersonRandomlyWalkingState(this,stateMachine);
         WalkingWithPurpose = new PersonWalkingWithPurposeState(this,stateMachine);
         Idle = new PersonIdleState(this,stateMachine);
         Meandering = new PersonMeanderingState(this,stateMachine);
         Dialogue = new PersonDialogueWithPlayerState(this,stateMachine);
-    
+        #endregion
     }
 
     protected override void Start()
@@ -92,7 +114,9 @@ public class NPCPerson : Person, Iinteractable
         base.Start();
         stateMachine.Initialize(Idle);
     }
+    #endregion
 
+    #region update actions
     protected override void Update()
     {
         base.Update();
@@ -113,10 +137,11 @@ public class NPCPerson : Person, Iinteractable
         stateMachine.currentState.FixedFrameUpdate();
 
     }
+    #endregion
 
 //------------------------------------------------------------
 
-//movement functions-------------------------------
+//movement functions-(Non-Eventfull-PathFinding)-------------------------------
 
     public int MoveMovePointTo(Vector3 destination)  //returns int based on what was hit, 1=player, 2=npc, 3=terrain, 0=nothing
     {
@@ -364,7 +389,7 @@ public class NPCPerson : Person, Iinteractable
 
 //-------------------------------------------------
 
-//AI functions-------------------------------------
+//AI functions-(PathFinding)-------------------------------------
 
     
     public Vector3 ChooseRandomSpotInRoom(Room room,int numberOfSpacesToMove = 3)
@@ -449,10 +474,31 @@ public class NPCPerson : Person, Iinteractable
 
 //-------------------------------------------------
 
-    public void Interact(int interactType)
+//public class implimentations------------------------------
+    #region Iinteractable interface
+    public string Interact(int interactType)
     {
-        if (interactType == 1) {
-            stateMachine.ChangeState(Dialogue);
+        if (interactType == 1) { //To DO: change to enum at one point 
+
+            //trigger EnterDialogue Event
+            EventManager.Instance.EnterDialogue(); //triggers OnEnterDialogue
+            EventManager.Instance.StartDialogue(name);
+
         }
+        return this.name;
     }
+    #endregion
+
+    #region OnEnterDialogue/OnExitDialogue
+    void OnEnterDialogue()
+    {
+        stateMachine.ChangeState(Dialogue); //puts all npc in dialogue mode, freezing them and making them interact with the Dialogue object
+    }
+
+    void OnExitDialogue()
+    {
+        stateMachine.ChangeState(stateMachine.previousState); //returning npcs to whatever state they were last in 
+    }
+    #endregion
+//---------------------------------------------------------------
 }

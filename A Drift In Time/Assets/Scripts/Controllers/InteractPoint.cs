@@ -8,10 +8,12 @@ public class InteractPoint : MonoBehaviour
 
     [SerializeField] private GameObject parent;
     private Person parentPerson;
+    public static InteractPoint Instance;
 
 
     void Awake()
     {
+        Instance=this;
         parent = transform.parent.gameObject;
         parent.TryGetComponent<Person>(out parentPerson);
     }
@@ -29,10 +31,10 @@ public class InteractPoint : MonoBehaviour
     }
 
     public void Interact(int interactType){
-        Debug.Log("pp");
+        //Debug.Log("interact attempt");
         if (IsInteractable(out Iinteractable interactable)) {
             interactable.Interact(interactType);
-            Debug.Log("Interacted");
+            //Debug.Log("Interacted");
         }
     }
 

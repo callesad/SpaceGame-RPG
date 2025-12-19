@@ -17,7 +17,11 @@ public class PersonWalkingWithPurposeState : PersonState
 
         if (npc.debugLogs) Debug.Log(npc.gameObject.name + " Entered Walking With Purpose State");
 
-        WIWTBclone = npc.whereIWantToBe;
+        if (npc.whereIWantToBe!=null) {
+            WIWTBclone = npc.whereIWantToBe;
+        } else if (WIWTBclone != null) {
+            npc.whereIWantToBe = WIWTBclone;
+        }
     }
 
     public override void FrameUpdate()

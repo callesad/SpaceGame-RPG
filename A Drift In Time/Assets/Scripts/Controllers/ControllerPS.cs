@@ -11,7 +11,7 @@ public class ControllerPS: Controller
         this.player = player;
     }
 
-    public void GetMovement()
+    public override void GetMovement()
     {
         float speedBoost = 1f;
         float y = Input.GetAxis("Vertical");
@@ -23,7 +23,7 @@ public class ControllerPS: Controller
         player.TurnShip(x);
     }
 
-    public void GetAction()
+    public override void GetAction()
     {
         if (Input.GetKey(KeyCode.Space))
             player.UseWeapon(player.weapon);

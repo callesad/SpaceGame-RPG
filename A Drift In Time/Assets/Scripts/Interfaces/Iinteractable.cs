@@ -5,6 +5,6 @@ using UnityEngine;
 public interface Iinteractable
 {
     // Start is called before the first frame update
-    void Interact(int interactType); //1 to talk
+    string Interact(int interactType); //1 to talk //returns name of interacted object
 
 }

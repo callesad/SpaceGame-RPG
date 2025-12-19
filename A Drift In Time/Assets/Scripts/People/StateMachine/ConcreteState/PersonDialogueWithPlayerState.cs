@@ -10,7 +10,11 @@ public class PersonDialogueWithPlayerState : PersonState
 
     public override void EnterState() {
 
-        Debug.Log("entered dialogue");
+        var npc = person as NPCPerson;
+
+        if (npc.debugLogs) Debug.Log(npc.gameObject.name + " Entered Dialogue State");
+
+        npc.whereImGoing = null;
 
     }
 

@@ -4,5 +4,13 @@ using UnityEngine;
 
 public class Controller
 {
-    
+    public virtual void GetMovement()
+    {
+
+    }
+
+    public virtual void GetAction()
+    {
+        
+    }
 }

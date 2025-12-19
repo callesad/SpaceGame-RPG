@@ -17,7 +17,7 @@ public class ControllerPP: Controller
         this.interactPoint = interactPoint;
     }
 
-    public void GetMovement()
+    public override void GetMovement()
     {
         //float sprintBoost = 1f;
         //float y = Input.GetAxis("Vertical");
@@ -72,7 +72,7 @@ public class ControllerPP: Controller
         
     }
 
-    public void GetAction()
+    public override void GetAction()
     {
         if (Input.GetKeyDown(KeyCode.E))
             player.interactPoint.Interact(1);
