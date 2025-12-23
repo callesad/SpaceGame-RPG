@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Ink.Runtime;
 
 public class EventManager : MonoBehaviour
 {
@@ -36,19 +37,19 @@ public class EventManager : MonoBehaviour
     }
 
 
-    public event Action OnUpdateDialogueChoice;
+    public event Action<int> OnUpdateDialogueChoice;
 
-    public void UpdateDialogueChoice()
+    public void UpdateDialogueChoice(int index)
     {
-        OnUpdateDialogueChoice?.Invoke();
+        OnUpdateDialogueChoice?.Invoke(index);
     }
 
 
-    public event Action OnDisplayDialogue;
+    public event Action<string, List<Choice>> OnDisplayDialogue;
 
-    public void DisplayDialogue()
+    public void DisplayDialogue(string dialogueLine, List<Choice> dialogueChoices)
     {
-        OnDisplayDialogue?.Invoke();
+        OnDisplayDialogue?.Invoke(dialogueLine, dialogueChoices);
     }
 
     public event Action OnEndDialogue;

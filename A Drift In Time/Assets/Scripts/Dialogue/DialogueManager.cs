@@ -1,15 +1,28 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Ink.Runtime;
 
 public class DialogueManager : MonoBehaviour
 {
 
     public GameObject DialogueUI;
 
-    private bool dialogueActive = false;
+    public static DialogueManager Instance;
 
-    
+    private bool dialogueActive = false;
+    public int DialogueChoiceIndex = 0;
+
+    [Header("Ink Story")]
+    [SerializeField] private TextAsset inkJson; 
+
+    [Header("Dialogue UI")]
+    [SerializeField] private DialogueUI UI;
+
+    private Story story;
+
+    private int currentChoiceIndex = -1;
+
 
     #region subscribing to events
 
@@ -20,6 +33,8 @@ public class DialogueManager : MonoBehaviour
             EventManager.Instance.OnEndDialogue+=OnEndDialogue;
             EventManager.Instance.OnEnterDialogue+=OnEnterDialogue;
             EventManager.Instance.OnExitDialogue+=OnExitDialogue;
+            EventManager.Instance.OnUpdateDialogueChoice+=OnUpdateDialogueChoice;
+            
         }
     }
     
@@ -31,12 +46,22 @@ public class DialogueManager : MonoBehaviour
             EventManager.Instance.OnEndDialogue-=OnEndDialogue;
             EventManager.Instance.OnEnterDialogue-=OnEnterDialogue;
             EventManager.Instance.OnExitDialogue-=OnExitDialogue;
+            EventManager.Instance.OnUpdateDialogueChoice-=OnUpdateDialogueChoice;
+            
         }
     }
 
     #endregion
 
-    
+    void Awake()
+    {
+        Instance = this;
+        if (inkJson!=null) {
+            story = new Story(inkJson.text);
+        } else {
+            Debug.Log("inkJson file is null");
+        }
+    }
 
     #region public class implimentations
 
@@ -50,11 +75,25 @@ public class DialogueManager : MonoBehaviour
     void OnStartDialogue(string knotName)
     {
         Debug.Log("Started dialogue at knot "+"'"+knotName+"'");
+        if (!knotName.Equals("")) {
+            story.ChoosePathString(knotName); //jumps to the desired knot
+        } else {
+            Debug.Log("knotName was empty string when entering dialogue");
+        }
+
+        ContinueOrExitStory();//calls function to check if dialogue shold continue or terminate
+        
+    }
+
+    void OnUpdateDialogueChoice(int choiceIndex)
+    {
+        this.currentChoiceIndex = choiceIndex;
     }
 
     void OnEndDialogue()
     {
-        
+        story.ResetState();
+        EventManager.Instance.ExitDialogue();
     }
 
     void OnExitDialogue()
@@ -62,5 +101,25 @@ public class DialogueManager : MonoBehaviour
         dialogueActive = false;
         DialogueUI?.SetActive(false); //turns off ui
     }
+    #endregion
+
+    #region local functions
+
+    public void ContinueOrExitStory()
+    {
+
+
+        if (story.canContinue)
+        {
+            string dialogueLine = story.Continue();
+
+            EventManager.Instance.DisplayDialogue(dialogueLine, story.currentChoices);
+        }
+        else
+        {
+            EventManager.Instance.EndDialogue();
+        }
+    }
+
     #endregion
 }

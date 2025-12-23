@@ -6,6 +6,9 @@ public class DialogueController : Controller
 {
     DialogueUI UI;
 
+    //buttons
+
+
     public DialogueController(DialogueUI UI)
     {
         this.UI = UI;
@@ -18,7 +21,10 @@ public class DialogueController : Controller
 
     public override void GetAction()
     {
-
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            DialogueManager.Instance.ContinueOrExitStory();
+        }
     }
 
 

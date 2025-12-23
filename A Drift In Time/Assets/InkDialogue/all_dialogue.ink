@@ -1,4 +1,10 @@
-=== Jolene ===
+
+=== Merry ===
 Sup bitch
 u want a quest?
--> END
+You suck
+*[yes]
+    k
+*[No]
+    fuck you
+- -> END
