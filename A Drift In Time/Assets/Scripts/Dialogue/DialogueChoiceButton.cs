@@ -11,7 +11,7 @@ public class DialogueChoiceButton : MonoBehaviour, ISelectHandler
     [SerializeField] private Button button;
     [SerializeField] private TextMeshProUGUI buttonText;
 
-    private int choiceIndex = -1;
+    [SerializeField] private int choiceIndex = -1;
 
     public void SetChoiceIndex(int index)
     {
@@ -27,6 +27,19 @@ public class DialogueChoiceButton : MonoBehaviour, ISelectHandler
     public void SelectButton()
     {
         button.Select();
+    }
+
+    //AI written code for wrapping scrolling using unity built in UI features
+    public void SetNavigation(Button up, Button down)
+    {
+        Navigation nav = new Navigation
+        {
+            mode = Navigation.Mode.Explicit,
+            selectOnUp = up,
+            selectOnDown = down
+        };
+
+        button.navigation = nav;
     }
 
     //when button is selected the updatedialoguechoice event is triggered

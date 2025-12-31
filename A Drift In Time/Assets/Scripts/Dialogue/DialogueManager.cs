@@ -108,10 +108,25 @@ public class DialogueManager : MonoBehaviour
     public void ContinueOrExitStory()
     {
 
-
+        if (story.currentChoices.Count>0)
+        {
+            if (currentChoiceIndex<0||currentChoiceIndex>4) 
+            {
+                Debug.Log("Invalid choice index");
+                return;
+            }
+            story.ChooseChoiceIndex(currentChoiceIndex);
+        }
+        
         if (story.canContinue)
         {
             string dialogueLine = story.Continue();
+
+            if(dialogueLine=="")
+            {
+                EventManager.Instance.EndDialogue();
+                return;
+            }
 
             EventManager.Instance.DisplayDialogue(dialogueLine, story.currentChoices);
         }
