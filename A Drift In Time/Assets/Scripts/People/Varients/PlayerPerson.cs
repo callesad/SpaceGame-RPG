@@ -13,16 +13,18 @@ public class PlayerPerson : Person
         //Functions
 //monobehaviour functions
     #region subscribing to events
-    void OnEnable()
+    protected override void OnEnable()
     {
+        base.OnEnable();
         if (EventManager.Instance != null) {
             EventManager.Instance.OnEnterDialogue+=OnEnterDialogue;
             EventManager.Instance.OnExitDialogue+=OnExitDialogue;
         }
     }
 
-    void OnDisable()
+    protected override void OnDisable()
     {
+        base.OnDisable();
         if (EventManager.Instance != null) {
             EventManager.Instance.OnEnterDialogue-=OnEnterDialogue;
             EventManager.Instance.OnExitDialogue-=OnExitDialogue;
@@ -59,7 +61,6 @@ public class PlayerPerson : Person
     #region OnEnterDialogue/OnExitDialogue
     void OnEnterDialogue()
     {
-      
         controller = null;
     }
 

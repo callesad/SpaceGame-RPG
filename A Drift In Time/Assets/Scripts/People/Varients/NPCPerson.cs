@@ -75,21 +75,15 @@ public class NPCPerson : Person, Iinteractable
 //monobehaviour functions-------------------------------------
 
     #region subscribing to events
-    void OnEnable()
+    protected override void OnEnable()
     {
-        if (EventManager.Instance != null) {
-            EventManager.Instance.OnEnterDialogue+=OnEnterDialogue;
-            EventManager.Instance.OnExitDialogue+=OnExitDialogue;
-        }
+        
     }
     
 
-    void OnDisable()
+    protected override void OnDisable()
     {
-        if (EventManager.Instance != null) {
-            EventManager.Instance.OnEnterDialogue-=OnEnterDialogue;
-            EventManager.Instance.OnExitDialogue-=OnExitDialogue;
-        }
+        
     }
     #endregion
 
@@ -486,18 +480,6 @@ public class NPCPerson : Person, Iinteractable
 
         }
         return this.name;
-    }
-    #endregion
-
-    #region OnEnterDialogue/OnExitDialogue
-    void OnEnterDialogue()
-    {
-        stateMachine.ChangeState(Dialogue); //puts all npc in dialogue mode, freezing them and making them interact with the Dialogue object
-    }
-
-    void OnExitDialogue()
-    {
-        stateMachine.ChangeState(stateMachine.previousState); //returning npcs to whatever state they were last in 
     }
     #endregion
 //---------------------------------------------------------------

@@ -17,8 +17,19 @@ public class Person : MonoBehaviour, Idamageable
 
     public bool debugLogs;
 
+    #region subscribing to events
 
+    protected virtual void OnEnable()
+    {
+        
+    }
+
+    protected virtual void OnDisable()
+    {
+        
+    }
     
+    #endregion
 
     protected virtual void Awake()
     {
@@ -41,11 +52,15 @@ public class Person : MonoBehaviour, Idamageable
 
     protected virtual void Update()
     {
-
+        //bypasses all logic if game is frozen
+        if(EventManager.Instance.gameFrozen) {return;}
     }
 
     protected virtual void FixedUpdate()
     {
+        //bypasses all logic if game is frozen
+        if(EventManager.Instance.gameFrozen) {return;}
+
         //always moving towards movepoint
         transform.position = Vector3.MoveTowards(transform.position,movePoint.transform.position,moveSpeed * sprintBoost * Time.deltaTime);
     }

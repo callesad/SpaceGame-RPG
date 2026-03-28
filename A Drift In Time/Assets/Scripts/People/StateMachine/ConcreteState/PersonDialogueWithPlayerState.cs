@@ -20,7 +20,7 @@ public class PersonDialogueWithPlayerState : PersonState
 
     public override void ExitState() {
 
-        Debug.Log("exited dialogue");
+
     }
 
     public override void FrameUpdate() {}

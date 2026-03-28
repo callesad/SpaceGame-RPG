@@ -23,6 +23,8 @@ public class DialogueManager : MonoBehaviour
 
     private int currentChoiceIndex = -1;
 
+    private InkExternalFunctions inkExternalFunctions;
+
 
     #region subscribing to events
 
@@ -61,6 +63,13 @@ public class DialogueManager : MonoBehaviour
         } else {
             Debug.Log("inkJson file is null");
         }
+        inkExternalFunctions = new InkExternalFunctions();
+        inkExternalFunctions?.Bind(story);
+    }
+
+    void OnDestroy()
+    {
+        inkExternalFunctions?.UnBind(story);
     }
 
     #region public class implimentations
@@ -74,15 +83,28 @@ public class DialogueManager : MonoBehaviour
 
     void OnStartDialogue(string knotName)
     {
-        Debug.Log("Started dialogue at knot "+"'"+knotName+"'");
-        if (!knotName.Equals("")) {
-            story.ChoosePathString(knotName); //jumps to the desired knot
-        } else {
+        
+        knotName = knotName?.Trim();
+
+        if (string.IsNullOrEmpty(knotName)) {
             Debug.Log("knotName was empty string when entering dialogue");
+            EventManager.Instance.EndDialogue();
+            return;
         }
 
-        ContinueOrExitStory();//calls function to check if dialogue shold continue or terminate
-        
+        var result = story.ContentAtPath(new Ink.Runtime.Path(knotName));
+
+        if (result.obj == null || result.approximate)
+        {
+            Debug.Log($"Ink knot/stitch '{knotName}' does not exist.");
+            EventManager.Instance.EndDialogue();
+            return;
+        }
+
+        Debug.Log("Started dialogue at knot "+"'"+knotName+"'");
+
+        story.ChoosePathString(knotName); //jumps to the desired knot
+        ContinueOrExitStory();//calls function to check if dialogue shold continue or terminate    
     }
 
     void OnUpdateDialogueChoice(int choiceIndex)
